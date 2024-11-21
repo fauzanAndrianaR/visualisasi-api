@@ -1,16 +1,5 @@
-const express = require("express");
 const { Pool } = require("pg");
-const cors = require("cors");
-require("dotenv").config();
 
-const app = express();
-const port = 3000;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// PostgreSQL Pool
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -43,47 +32,12 @@ UFMacFqFIqzJTA+z0P/QhgDAy9/Qn/PchJ+tH3rNFf03rNpnl4gV6z33IeTFsVO5
 L+EihZos72ET3DlDP8oBvj5UD1HGeop/m+SMQgOd6r+jvkOlRnZFUPneruRHMIPC
 XJKt+UcyV9Zv4tG5buLV04VpU4HD5BAqHlA/QnXg0huB1tx2Z+MvG5ByewNtzYp/
 Lw68Q8lN6/kYZPSU68B3CcCoWfqKodobH2Pbe93je6obV8VC0A==
------END CERTIFICATE-----`   // Atur ini sesuai dengan kebijakan keamanan Anda
+-----END CERTIFICATE-----`  , // Pindahkan sertifikat ke file ENV
   },
 });
+
 pool.connect()
-  .then(() => console.log('Connected to PostgreSQL database!'))
-  .catch(err => console.error('Connection error', err.stack));
+  .then(() => console.log("Connected to PostgreSQL database!"))
+  .catch(err => console.error("Connection error", err.stack));
 
-// API Endpoints
-app.get("/siswa", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM jumlah_siswa");
-    res.json(result.rows);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-app.get("/guru", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM jumlah_guru");
-    res.json(result.rows);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-app.get("/sekolah", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM jumlah_sekolah");
-    res.json(result.rows);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-// 404 Route
-app.use((req, res) => {
-  res.status(404).json({ error: "404 not found" });
-});
-
-// Start Server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}/siswa`);
-});
+module.exports = pool;
