@@ -8,7 +8,7 @@ const pool = new Pool({
   database: process.env.DB_DATABASE,
   ssl: {
     rejectUnauthorized: true,
-    ca: DB_CA  , // Pindahkan sertifikat ke file ENV
+    ca: process.env.DB_CA.replace(/\\n/g, '\n'),   // Pindahkan sertifikat ke file ENV
   },
 });
 
